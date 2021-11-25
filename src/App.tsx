@@ -1,25 +1,47 @@
 import * as React from "react";
-import {createGlobalStyle} from "styled-components";
+import { Component } from "react";
+import Number from "./Number";
+import { Form, Input } from "./Input";
 
+interface IState {
+  counter: number;
+  name:string;
+}
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component<{}, IState> {
+  state = {
+    counter: 0,
+    name:""
+  };
+
+  add = () => {
+    this.setState((prev) => {
+      return {
+        counter: prev.counter + 1,
+      };
+    });
+  };
+
+  onChange=(event: React.SyntheticEvent<HTMLInputElement>)=>{
+     console.log(event.target)
+  }
+
+  onFormSubmit =(event:React.FormEvent)=>{
+    event.preventDefault();
+  }
+
+  render() {
+    const { counter,name } = this.state;
+    return (
+      <div>
+        <Form onFormSubmit={this.onFormSubmit}>
+          <Input value={name} onChange={this.onChange}/>
+        </Form>
+        <Number count={counter} />
+        <button onClick={this.add}>add</button>
+      </div>
+    );
+  }
 }
 
 export default App;
