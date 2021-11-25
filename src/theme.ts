@@ -1,4 +1,4 @@
 export default {
-    blueColor:"red",
-    yellowColor:"yellow"
-}
+  bodyMargin: "0px",
+  bodyColor: "#000000"
+};

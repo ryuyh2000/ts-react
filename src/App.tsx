@@ -1,45 +1,28 @@
 import * as React from "react";
 import { Component } from "react";
-import Number from "./Number";
-import { Form, Input } from "./Input";
-
+import Header from "./Hearder";
+import TextBox from "./TextBox"
 interface IState {
-  counter: number;
-  name:string;
+
 }
 
 class App extends Component<{}, IState> {
   state = {
-    counter: 0,
-    name:""
+
   };
 
-  add = () => {
-    this.setState((prev) => {
-      return {
-        counter: prev.counter + 1,
-      };
-    });
-  };
-
-  onChange=(event: React.SyntheticEvent<HTMLInputElement>)=>{
-     console.log(event.target)
-  }
-
-  onFormSubmit =(event:React.FormEvent)=>{
-    event.preventDefault();
-  }
 
   render() {
-    const { counter,name } = this.state;
+
     return (
-      <div>
-        <Form onFormSubmit={this.onFormSubmit}>
-          <Input value={name} onChange={this.onChange}/>
-        </Form>
-        <Number count={counter} />
-        <button onClick={this.add}>add</button>
-      </div>
+      <>
+        <div >
+          <Header/>
+          <TextBox
+            Text="asdfasdf"
+          />
+        </div>
+      </>
     );
   }
 }
