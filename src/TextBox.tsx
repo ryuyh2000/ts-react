@@ -6,6 +6,8 @@ const Container = styled.div`
   height: 110px;
   border: 2px solid white;
   border-radius: 10%;
+  margin-top: 25%;
+  margin-left: 25%;
 `;
 
 interface ITextBox {

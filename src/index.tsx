@@ -4,6 +4,9 @@ import App from "./App";
 import { ThemeProvider } from "styled-components";
 import theme from "./theme"
 import { createGlobalStyle } from 'styled-components'
+import FireBase from "./FireBase";
+
+console.log(FireBase);
 
 const GlobalStyle = createGlobalStyle`
   body {
