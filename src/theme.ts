@@ -1,5 +1,7 @@
-export default {
+import { DefaultTheme } from "styled-components";
+
+export const Themes: DefaultTheme = {
   bodyMargin: "0px",
-  bodyColor: "#000000",
-  bodyOpacity:"0.5"
+  bodyColor: "#282828",
+  bodyOpacity: "0.5",
 };

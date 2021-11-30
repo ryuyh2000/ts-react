@@ -1,11 +1,10 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, TextareaHTMLAttributes } from "react";
 import Header from "./Hearder";
 import TextBox from "./TextBox";
 import { fireDB } from "./FireBase";
 import { GitApi } from "./API";
 import styled from "styled-components";
-import SendContents from "./SendContents";
 
 interface commitData {
   commit: {
@@ -18,8 +17,23 @@ interface commitArray {
   commitMesssage: string;
 }
 
+interface dateArray {
+  date: string;
+}
+
+interface dateData {
+  commit: {
+    author: {
+      date: string;
+    };
+  };
+}
+
 const Container = styled.div<{ Opacity: boolean }>`
-  opacity: ${(props) => props.Opacity && "0.5"};
+  opacity: ${(props) => props.Opacity && "0.1"};
+  h1 {
+    color: white;
+  }
 `;
 
 const TextContainer = styled.div`
@@ -42,15 +56,59 @@ const Btn = styled.button`
   padding-bottom: 10px;
 `;
 
+const Box = styled.div`
+  width: 750px;
+  height: 750px;
+  position: absolute;
+  z-index: 2;
+  background-color: white;
+  opacity: 0.5;
+  margin: 5% 0 10% 25%;
+  border-radius: 10px;
+  button {
+    float: right;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    border-style: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+  }
+  div {
+    margin: 30% 0% 0% 13%;
+    textarea {
+      width: 550px;
+      height: 400px;
+      resize: none;
+      border: 2px solid black;
+      font-size: 20px;
+    }
+
+    input {
+      margin-left: 0%;
+      margin-bottom: 10px;
+    }
+    button {
+      margin-right: 93px;
+      width: auto;
+    }
+  }
+`;
+
 const App = () => {
-  const [msg, setMsg] = useState<string>("");
+  const [msg, setmsg] = useState<string>("");
   const [count, setCount] = useState<number>(0);
   const [commit, setCommit] = useState([] as commitArray[]);
+  const [commitDate, setCommitDate] = useState([] as dateArray[]);
   const [fireInfo, setFireInfo] = useState<string[]>([]);
   const [add, setAdd] = useState<boolean>(false);
+  const [todayDate, setTodayDate] = useState("");
+  const textAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setmsg(event.target.value);
+  };
 
-  const submitMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMsg(event.target.value);
+  const sendMsg = () => {
+    fireDB.collection(`data`).doc(`content${count}`).set({ content: msg });
   };
 
   const getFirebaseInfo = async () => {
@@ -65,13 +123,13 @@ const App = () => {
         return array.indexOf(element) === index;
       });
       setFireInfo(uniqueArr);
+      getDate()
     } catch (error) {
       console.log(error);
     }
   };
 
   const onClick = () => {
-    //fireDB.collection(`data`).doc(`content${count}`).set({ content: msg });
     setAdd(!add);
   };
 
@@ -85,10 +143,28 @@ const App = () => {
       let msgData: commitArray[] = data.map((commitMsg: commitData) => ({
         message: commitMsg.commit.message,
       }));
+      let msgDate: dateArray[] = data.map((data: dateData) => ({
+        date: data.commit.author.date,
+      }));
+
+      setCommitDate(msgDate);
       setCommit(msgData);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ("0" + (today.getMonth() + 1)).slice(-2);
+    const day = ("0" + today.getDate()).slice(-2);
+
+    setTodayDate(year + "-" + month + "-" + day);
+  };
+
+  const contentBtn = () => {
+    setAdd(!add);
   };
 
   useEffect(() => {
@@ -98,20 +174,32 @@ const App = () => {
 
   return (
     <>
+      {add && (
+        <Box>
+          <button onClick={contentBtn}>X</button>
+          <div>
+            <input style={{ marginLeft: "0%", marginBottom: "10px" }} />
+            <textarea onChange={textAreaChange} />
+            <button onClick={sendMsg}>Send Study Record</button>
+          </div>
+        </Box>
+      )}
+      <Header />
       <Container Opacity={add}>
-        {add && <SendContents />}
-        <Header />
-        <h1 style={{ color: "white" }}>GIT COMMIT MESSAGE</h1>
+        <h1>GIT COMMIT MESSAGE</h1>
         <TextContainer>
           {commit.map((commitMSG, index) => (
-            <TextBox key={index} Text={commitMSG.message} />
+            <TextBox
+              date={commitDate[index].date}
+              key={index}
+              Text={commitMSG.message}
+            />
           ))}
         </TextContainer>
-
-        <h1 style={{ color: "white" }}>PRACTICE CONTENTS</h1>
+        <h1>PRACTICE CONTENTS</h1>
         <TextContainer>
           {fireInfo.map((info, index) => (
-            <TextBox key={index} Text={info} />
+            <TextBox date={todayDate} key={index} Text={info} />
           ))}
           <Btn onClick={onClick}>
             <P>+</P>
