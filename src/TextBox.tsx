@@ -10,8 +10,13 @@ const P = styled.p`
   opacity: 0;
 `;
 
-const Container = styled.div`
-  width: 100px;
+const Container = styled.div<{ sibal: number }>`
+  position:absolute;
+  left:500px;
+`;
+
+const ContentsContainer = styled.div`
+  width:100px;
   height: 90px;
   background-color: #3f3f3f;
   border-radius: 10px;
@@ -21,7 +26,7 @@ const Container = styled.div`
   box-shadow: 8px 7px 2px 1px rgba(0, 0, 0, 0.2);
   color: white;
   transition-duration: 0.3s;
-
+  list-style: none;
   &:hover {
     ${P} {
       opacity: 1;
@@ -34,16 +39,17 @@ const Container = styled.div`
 interface ITextBox {
   Text: string;
   date: string;
+  sibal: number;
 }
-
-const TextBox: React.FunctionComponent<ITextBox> = ({ Text, date }) => {
+// index 를 넘겨서 *100 해주면 될듯?
+const TextBox: React.FunctionComponent<ITextBox> = (props) => {
   return (
-    <>
-      <Container>
-        <P>{date.substr(0,10)}</P>
-        <span>{Text}</span>
-      </Container>
-    </>
+    <Container sibal={props.sibal}>
+      <ContentsContainer >
+        <P>{props.date.substr(0, 10)}</P>
+        <span>{props.Text}</span>
+      </ContentsContainer>
+    </Container>
   );
 };
 

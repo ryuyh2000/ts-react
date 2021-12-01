@@ -37,8 +37,13 @@ const Container = styled.div<{ Opacity: boolean }>`
 `;
 
 const TextContainer = styled.div`
-  display: flex;
-  margin-left: 5%;
+
+  ul {
+    display: flex;
+  }
+  li {
+    list-style: none;
+  }
 `;
 
 const P = styled.p`
@@ -96,13 +101,15 @@ const Box = styled.div`
 `;
 
 const App = () => {
-  const [msg, setmsg] = useState<string>("");
-  const [count, setCount] = useState<number>(0);
+  const [msg, setmsg] = useState("");
+  const [count, setCount] = useState(0);
   const [commit, setCommit] = useState([] as commitArray[]);
   const [commitDate, setCommitDate] = useState([] as dateArray[]);
   const [fireInfo, setFireInfo] = useState<string[]>([]);
-  const [add, setAdd] = useState<boolean>(false);
+  const [add, setAdd] = useState(false);
   const [todayDate, setTodayDate] = useState("");
+  const [slide, setSlide] = useState(0);
+
   const textAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setmsg(event.target.value);
   };
@@ -123,7 +130,7 @@ const App = () => {
         return array.indexOf(element) === index;
       });
       setFireInfo(uniqueArr);
-      getDate()
+      getDate();
     } catch (error) {
       console.log(error);
     }
@@ -146,7 +153,6 @@ const App = () => {
       let msgDate: dateArray[] = data.map((data: dateData) => ({
         date: data.commit.author.date,
       }));
-
       setCommitDate(msgDate);
       setCommit(msgData);
     } catch (error) {
@@ -159,12 +165,19 @@ const App = () => {
     const year = today.getFullYear();
     const month = ("0" + (today.getMonth() + 1)).slice(-2);
     const day = ("0" + today.getDate()).slice(-2);
-
     setTodayDate(year + "-" + month + "-" + day);
   };
 
   const contentBtn = () => {
     setAdd(!add);
+  };
+
+  const leftBtn = () => {
+    setSlide(slide + 100);
+  };
+
+  const rightBtn = () => {
+    setSlide(slide - 100);
   };
 
   useEffect(() => {
@@ -188,26 +201,38 @@ const App = () => {
       <Container Opacity={add}>
         <h1>GIT COMMIT MESSAGE</h1>
         <TextContainer>
-          {commit.map((commitMSG, index) => (
-            <TextBox
-              date={commitDate[index].date}
-              key={index}
-              Text={commitMSG.message}
-            />
-          ))}
+          <ul>
+            {commit.map((commitMSG, index) => (
+              <li key={index}>
+                <TextBox
+                  date={commitDate[index].date}
+                  Text={commitMSG.message}
+                  sibal={slide}
+                />
+              </li>
+            ))}
+          </ul>
         </TextContainer>
+        <button onClick={leftBtn}>왼쪽</button>
+        <button onClick={rightBtn}>오른쪽</button>
         <h1>PRACTICE CONTENTS</h1>
         <TextContainer>
-          {fireInfo.map((info, index) => (
-            <TextBox date={todayDate} key={index} Text={info} />
-          ))}
-          <Btn onClick={onClick}>
-            <P>+</P>
-          </Btn>
+          <ul>
+            {fireInfo.map((info, index) => (
+              <li key={index}>
+                <TextBox date={todayDate} Text={info} sibal={slide} />
+              </li>
+            ))}
+            <Btn onClick={onClick}>
+              <P>+</P>
+            </Btn>
+          </ul>
         </TextContainer>
+        <button>왼쪽</button>
+        <button>오른쪽</button>
       </Container>
     </>
   );
 };
-
+// slide => textBox 로 transfer 에 대한 props 넘겨야함
 export default App;
