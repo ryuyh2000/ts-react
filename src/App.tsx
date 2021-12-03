@@ -158,7 +158,6 @@ const App = () => {
       msgDate.map((information) => DATE.push(information.date));
       setCommitDate(DATE);
 
-      console.log(commit, commitDate);
     } catch (error) {
       console.log(error);
     }
@@ -182,7 +181,6 @@ const App = () => {
 
   return (
     <>
-      {console.log(commit, commitDate, fireInfo)}
       {add && (
         <Box>
           <button onClick={contentBtn}>X</button>

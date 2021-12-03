@@ -4,14 +4,17 @@ import styled from "styled-components";
 const P = styled.p`
   position: absolute;
   z-index: 2;
+  top: 220px;
   padding-left: 30px;
-  padding-top: 80px;
   color: #00ff73;
   opacity: 0;
 `;
 
 const Container = styled.div`
-display: flex;
+  margin-left: 35%;
+  width: 800px;
+  height: 100px;
+  display: flexbox;
 `;
 
 const ContentsContainer = styled.div`
@@ -36,26 +39,48 @@ const ContentsContainer = styled.div`
 `;
 
 interface ITextBox {
-  commitMsg: string[];
-  commitDate: string[];
-  fireInfo: string[];
+  commitMsg?: string[];
+  commitDate?: string[];
+  fireInfo?: string[];
 }
 // index 를 넘겨서 *100 해주면 될듯?
 const TextBox: React.FunctionComponent<ITextBox> = ({
-  commitMsg,
-  commitDate,
-  fireInfo,
+  commitMsg='',
+  commitDate='',
+  fireInfo='',
 }) => {
+  const [index, setwidth] = React.useState(0);
+  const left = () => {
+    if(index>0){
+      setwidth(index-1);
+    }else{
+      setwidth(commitMsg.length-3);
+    }
+  };
+
+  const right = () => {
+    if(index<commitMsg.length-3){
+      setwidth(index + 1);
+    }else{
+      setwidth(0)
+    }
+  };
   return (
     <Container>
-      {commitMsg.map((msg,index) => (
-        <ContentsContainer>
-          <span>{msg}</span>
-          <P>{commitDate[index]}</P>
-          <br />
-        </ContentsContainer>
-      ))}
-      <button>asd</button>
+      <button onClick={left}>left</button>
+      <ContentsContainer>
+        <P>{commitDate[index]}</P>
+        <span>{commitMsg[index]}</span>
+      </ContentsContainer>
+      <ContentsContainer>
+        <P>{commitDate[index + 1]}</P>
+        <span>{commitMsg[index + 1]}</span>
+      </ContentsContainer>
+      <ContentsContainer>
+        <P>{commitDate[index + 2]}</P>
+        <span>{commitMsg[index + 2]}</span>
+      </ContentsContainer>
+      <button onClick={right}>right</button>
     </Container>
   );
 };
