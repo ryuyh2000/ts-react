@@ -10,13 +10,12 @@ const P = styled.p`
   opacity: 0;
 `;
 
-const Container = styled.div<{ sibal: number }>`
-  position:absolute;
-  left:500px;
+const Container = styled.div`
+display: flex;
 `;
 
 const ContentsContainer = styled.div`
-  width:100px;
+  width: 100px;
   height: 90px;
   background-color: #3f3f3f;
   border-radius: 10px;
@@ -37,20 +36,53 @@ const ContentsContainer = styled.div`
 `;
 
 interface ITextBox {
-  Text: string;
-  date: string;
-  sibal: number;
+  commitMsg: string[];
+  commitDate: string[];
+  fireInfo: string[];
 }
 // index 를 넘겨서 *100 해주면 될듯?
-const TextBox: React.FunctionComponent<ITextBox> = (props) => {
+const TextBox: React.FunctionComponent<ITextBox> = ({
+  commitMsg,
+  commitDate,
+  fireInfo,
+}) => {
   return (
-    <Container sibal={props.sibal}>
-      <ContentsContainer >
-        <P>{props.date.substr(0, 10)}</P>
-        <span>{props.Text}</span>
-      </ContentsContainer>
+    <Container>
+      {commitMsg.map((msg,index) => (
+        <ContentsContainer>
+          <span>{msg}</span>
+          <P>{commitDate[index]}</P>
+          <br />
+        </ContentsContainer>
+      ))}
+      <button>asd</button>
     </Container>
   );
 };
 
 export default TextBox;
+
+/* 
+commit
+commitDate
+fireInfo
+
+            {commit.map((commitMSG, index) => (
+              <li key={index}>
+                <TextBox
+                  date={commitDate[index].date}
+                  Text={commitMSG.message}
+                  index={index}
+                />
+              </li>
+            ))}
+            {fireInfo.map((info, index) => (
+              <li key={index}>
+                <TextBox
+                  date={todayDate}
+                  Text={info}
+                  index={index}
+                />
+              </li>
+            ))}
+*/

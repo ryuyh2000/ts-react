@@ -14,7 +14,6 @@ interface commitData {
 
 interface commitArray {
   message: string;
-  commitMesssage: string;
 }
 
 interface dateArray {
@@ -37,7 +36,6 @@ const Container = styled.div<{ Opacity: boolean }>`
 `;
 
 const TextContainer = styled.div`
-
   ul {
     display: flex;
   }
@@ -103,12 +101,11 @@ const Box = styled.div`
 const App = () => {
   const [msg, setmsg] = useState("");
   const [count, setCount] = useState(0);
-  const [commit, setCommit] = useState([] as commitArray[]);
-  const [commitDate, setCommitDate] = useState([] as dateArray[]);
+  const [commit, setCommit] = useState<string[]>([]);
+  const [commitDate, setCommitDate] = useState<string[]>([]);
   const [fireInfo, setFireInfo] = useState<string[]>([]);
   const [add, setAdd] = useState(false);
   const [todayDate, setTodayDate] = useState("");
-  const [slide, setSlide] = useState(0);
 
   const textAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setmsg(event.target.value);
@@ -150,11 +147,18 @@ const App = () => {
       let msgData: commitArray[] = data.map((commitMsg: commitData) => ({
         message: commitMsg.commit.message,
       }));
+      let DATA: string[] = [];
+      msgData.map((information) => DATA.push(information.message));
+      setCommit(DATA);
+
       let msgDate: dateArray[] = data.map((data: dateData) => ({
-        date: data.commit.author.date,
+        date: data.commit.author.date.substr(0,10),
       }));
-      setCommitDate(msgDate);
-      setCommit(msgData);
+      let DATE: string[] = [];
+      msgDate.map((information) => DATE.push(information.date));
+      setCommitDate(DATE);
+
+      console.log(commit, commitDate);
     } catch (error) {
       console.log(error);
     }
@@ -171,15 +175,6 @@ const App = () => {
   const contentBtn = () => {
     setAdd(!add);
   };
-
-  const leftBtn = () => {
-    setSlide(slide + 100);
-  };
-
-  const rightBtn = () => {
-    setSlide(slide - 100);
-  };
-
   useEffect(() => {
     getFirebaseInfo();
     getCommitMsg();
@@ -187,6 +182,7 @@ const App = () => {
 
   return (
     <>
+      {console.log(commit, commitDate, fireInfo)}
       {add && (
         <Box>
           <button onClick={contentBtn}>X</button>
@@ -201,35 +197,17 @@ const App = () => {
       <Container Opacity={add}>
         <h1>GIT COMMIT MESSAGE</h1>
         <TextContainer>
-          <ul>
-            {commit.map((commitMSG, index) => (
-              <li key={index}>
-                <TextBox
-                  date={commitDate[index].date}
-                  Text={commitMSG.message}
-                  sibal={slide}
-                />
-              </li>
-            ))}
-          </ul>
+          <TextBox commitMsg={commit} commitDate={commitDate} fireInfo={fireInfo} />
         </TextContainer>
-        <button onClick={leftBtn}>왼쪽</button>
-        <button onClick={rightBtn}>오른쪽</button>
+
         <h1>PRACTICE CONTENTS</h1>
         <TextContainer>
           <ul>
-            {fireInfo.map((info, index) => (
-              <li key={index}>
-                <TextBox date={todayDate} Text={info} sibal={slide} />
-              </li>
-            ))}
             <Btn onClick={onClick}>
               <P>+</P>
             </Btn>
           </ul>
         </TextContainer>
-        <button>왼쪽</button>
-        <button>오른쪽</button>
       </Container>
     </>
   );
