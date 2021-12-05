@@ -1,10 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
 
+interface PSProrps {
+  fireInfo: string[];
+}
+
 const P = styled.p`
   position: absolute;
   z-index: 2;
-  top: 340px;
+  top: 520px;
   padding-left: 30px;
   color: #00ff73;
   opacity: 0;
@@ -38,28 +42,19 @@ const ContentsContainer = styled.div`
   }
 `;
 
-interface ITextBox {
-  commitMsg: string[];
-  commitDate: string[];
-
-}
-// index 를 넘겨서 *100 해주면 될듯?
-const TextBox: React.FunctionComponent<ITextBox> = ({
-  commitMsg,
-  commitDate,
-}) => {
+const PracticeContents: React.FunctionComponent<PSProrps> = ({ fireInfo }) => {
   const [index, setwidth] = React.useState(0);
   const left = () => {
     if (index > 0) {
       setwidth(index - 1);
     } else {
-      setwidth(commitMsg.length - 3);
+      setwidth(fireInfo.length - 3);
     }
   };
 
   const right = () => {
-    if (index < commitMsg.length - 3) {
-      setwidth(index + 1); 
+    if (index < fireInfo.length - 3) {
+      setwidth(index + 1);
     } else {
       setwidth(0);
     }
@@ -68,45 +63,20 @@ const TextBox: React.FunctionComponent<ITextBox> = ({
     <Container>
       <button style={{marginRight:'10px'}} onClick={left}>left</button>
       <ContentsContainer>
-        <P>{commitDate[index]}</P>
-        <span>{commitMsg[index]}</span>
+        <P>2021-12-01</P>
+        <span>{fireInfo[index]}</span>
       </ContentsContainer>
       <ContentsContainer>
-        <P>{commitDate[index + 1]}</P>
-        <span>{commitMsg[index + 1]}</span>
+        <P>2021-12-02</P>
+        <span>{fireInfo[index + 1]}</span>
       </ContentsContainer>
       <ContentsContainer>
-        <P>{commitDate[index + 2]}</P>
-        <span>{commitMsg[index + 2]}</span>
+        <P>2021-12-03</P>
+        <span>{fireInfo[index + 2]}</span>
       </ContentsContainer>
       <button onClick={right}>right</button>
     </Container>
   );
 };
 
-export default TextBox;
-
-/* 
-commit
-commitDate
-fireInfo
-
-            {commit.map((commitMSG, index) => (
-              <li key={index}>
-                <TextBox
-                  date={commitDate[index].date}
-                  Text={commitMSG.message}
-                  index={index}
-                />
-              </li>
-            ))}
-            {fireInfo.map((info, index) => (
-              <li key={index}>
-                <TextBox
-                  date={todayDate}
-                  Text={info}
-                  index={index}
-                />
-              </li>
-            ))}
-*/
+export default PracticeContents;

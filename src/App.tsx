@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useState, useEffect, TextareaHTMLAttributes } from "react";
-import Header from "./Hearder";
+import { useState, useEffect } from "react";
 import TextBox from "./TextBox";
 import { fireDB } from "./FireBase";
 import { GitApi } from "./API";
+import PracticeContents from "./PracticeSlide";
 import styled from "styled-components";
 
 interface commitData {
@@ -27,6 +27,10 @@ interface dateData {
     };
   };
 }
+
+const H1 = styled.h1`
+  margin-left: 700px;
+`;
 
 const Container = styled.div<{ Opacity: boolean }>`
   opacity: ${(props) => props.Opacity && "0.1"};
@@ -57,6 +61,8 @@ const Btn = styled.button`
   border-radius: 10%;
   background-color: black;
   padding-bottom: 10px;
+  margin-left: 865px;
+  margin-top: 20px;
 `;
 
 const Box = styled.div`
@@ -66,7 +72,8 @@ const Box = styled.div`
   z-index: 2;
   background-color: white;
   opacity: 0.5;
-  margin: 5% 0 10% 25%;
+  margin-top: -100px;
+  margin-left: 550px;
   border-radius: 10px;
   button {
     float: right;
@@ -152,12 +159,11 @@ const App = () => {
       setCommit(DATA);
 
       let msgDate: dateArray[] = data.map((data: dateData) => ({
-        date: data.commit.author.date.substr(0,10),
+        date: data.commit.author.date.substr(0, 10),
       }));
       let DATE: string[] = [];
       msgDate.map((information) => DATE.push(information.date));
       setCommitDate(DATE);
-
     } catch (error) {
       console.log(error);
     }
@@ -180,34 +186,45 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <div style={{ marginTop: "200px" }}>
       {add && (
         <Box>
           <button onClick={contentBtn}>X</button>
           <div>
-            <input style={{ marginLeft: "0%", marginBottom: "10px" }} />
-            <textarea onChange={textAreaChange} />
+            <input
+              style={{
+                border: "2px solid black",
+                marginBottom: "10px",
+                width:"500px",
+              }}
+            />
+            <input type='radio'/>
+            <textarea
+              style={{ border: "5px solid black" }}
+              onChange={textAreaChange}
+            />
             <button onClick={sendMsg}>Send Study Record</button>
           </div>
         </Box>
       )}
-      <Header />
+
       <Container Opacity={add}>
-        <h1>GIT COMMIT MESSAGE</h1>
+        <H1>GIT COMMIT MESSAGE</H1>
         <TextContainer>
-          <TextBox commitMsg={commit} commitDate={commitDate} fireInfo={fireInfo} />
+          <TextBox commitMsg={commit} commitDate={commitDate} />
         </TextContainer>
 
-        <h1>PRACTICE CONTENTS</h1>
+        <H1>PRACTICE CONTENTS</H1>
         <TextContainer>
-          <ul>
-            <Btn onClick={onClick}>
-              <P>+</P>
-            </Btn>
-          </ul>
+          <PracticeContents fireInfo={fireInfo} />
+        </TextContainer>
+        <TextContainer>
+          <Btn onClick={onClick}>
+            <P>+</P>
+          </Btn>
         </TextContainer>
       </Container>
-    </>
+    </div>
   );
 };
 // slide => textBox 로 transfer 에 대한 props 넘겨야함
