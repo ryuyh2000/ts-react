@@ -209,7 +209,7 @@ const App = () => {
       )}
 
       <Container Opacity={add}>
-        <H1>GIT COMMIT MESSAGE</H1>
+        <H1>GIT COMMIT MESSAGe</H1>
         <TextContainer>
           <TextBox commitMsg={commit} commitDate={commitDate} />
         </TextContainer>
