@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom";
 import App from "./App";
 import { ThemeProvider,createGlobalStyle } from "styled-components";
 import {Themes} from "./theme"
-import FireBase from "./FireBase";
 
 
 const GlobalStyle = createGlobalStyle`

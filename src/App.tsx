@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import TextBox from "./GitSlide";
-import { fireDB } from "./FireBase";
-import { GitApi } from "./API";
-import PracticeSlide from "./PracticeSlide";
+import { GitApi, CRUDApi } from "./API";
 import styled from "styled-components";
 
 interface commitData {
@@ -117,14 +115,9 @@ const Ul = styled.ul`
 const App = () => {
   const [msg, setmsg] = useState("");
   const [title, settitle] = useState("");
-  const [count, setCount] = useState(0);
   const [commit, setCommit] = useState<string[]>([]);
   const [commitDate, setCommitDate] = useState<string[]>([]);
-  const [fireInfo, setFireInfo] = useState<
-    { content: string; date: string; language: string; title: string }[][]
-  >([]);
   const [add, setAdd] = useState(false);
-  const [todayDate, setTodayDate] = useState("");
   const [langList, setLangList] = useState<string[]>([]);
   const languages = ["Java Script", "HTML", "CSS", "React", "Type Script"];
 
@@ -134,70 +127,6 @@ const App = () => {
 
   const contentTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     settitle(event.target.value);
-  };
-
-  const sendMsg = async () => {
-    if ((title && todayDate && msg) !== "") {
-      console.log(langList);
-      fireDB.collection(`data`).doc(todayDate).set({
-        title: title,
-        date: todayDate,
-        content: msg,
-        languages: langList,
-      });
-    } else {
-      alert("empty");
-    }
-    setAdd(!add);
-  };
-
-  const getFirebaseInfo = async () => {
-    let firstArray: {
-      content: string;
-      date: string;
-      language: string;
-      title: string;
-    }[][] = [];
-
-    let secondArray: {
-      content: string;
-      date: string;
-      language: string;
-      title: string;
-    }[] = [];
-
-    try {
-      const res = await fireDB.collection("data").get();
-      res.forEach((doc) => {
-        secondArray.push({
-          content: doc.data().content,
-          date: doc.data().date,
-          language: doc.data().language,
-          title: doc.data().title,
-        });
-
-        firstArray.push(secondArray);
-        secondArray = [];
-      });
-      setFireInfo(firstArray);
-      getDate();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onClick = async () => {
-    try {
-      const res = await fireDB.collection("data").get();
-      res.forEach((doc) => {
-        setCount(count + 1);
-        console.log(count);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setLangList([]);
-    setAdd(!add);
   };
 
   const getCommitMsg = async () => {
@@ -225,32 +154,6 @@ const App = () => {
     }
   };
 
-  const getDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ("0" + (today.getMonth() + 1)).slice(-2);
-    const day = ("0" + today.getDate()).slice(-2);
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let seconds = today.getSeconds();
-    let milliseconds = today.getMilliseconds();
-
-    setTodayDate(
-      year +
-        "-" +
-        month +
-        "-" +
-        day +
-        hours +
-        ":" +
-        minutes +
-        ":" +
-        seconds +
-        ":" +
-        milliseconds
-    );
-  };
-
   const contentBtn = () => {
     setAdd(!add);
   };
@@ -269,8 +172,27 @@ const App = () => {
     }
   };
 
+  const onClick = async () => {
+    try {
+      const postData = await CRUDApi.postContents({
+        title: "asqwerqwreqdf",
+        content: "zxcvzxcv",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const CRUDGet = async () => {
+    try {
+      const res = await CRUDApi.getContents();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getFirebaseInfo();
+    CRUDGet();
     getCommitMsg();
   }, []);
 
@@ -305,7 +227,7 @@ const App = () => {
               style={{ border: "5px solid black" }}
               onChange={textAreaChange}
             />
-            <button onClick={sendMsg}>Send Study Record</button>
+            <button>Send Study Record</button>
           </div>
         </Box>
       )}
@@ -317,9 +239,6 @@ const App = () => {
         </TextContainer>
 
         <H1>PRACTICE CONTENTS</H1>
-        <TextContainer>
-          <PracticeSlide fireInfo={fireInfo} />
-        </TextContainer>
         <TextContainer>
           <Btn onClick={onClick}>
             <P>+</P>
