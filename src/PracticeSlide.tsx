@@ -1,14 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 
-interface PSProrps {
-  fireInfo: string[];
-}
-
 const P = styled.p`
   position: absolute;
   z-index: 2;
-  top: 520px;
+  top: 525px;
   padding-left: 30px;
   color: #00ff73;
   opacity: 0;
@@ -40,39 +36,68 @@ const ContentsContainer = styled.div`
     background-color: rgba(63, 63, 63, 0.3);
     color: rgba(255, 255, 255, 0.3);
   }
+  span {
+    overflow: hidden;
+  }
 `;
 
+interface PSProrps {
+  fireInfo: {
+    content: string;
+    date: string;
+    language: string;
+    title: string;
+  }[][];
+}
 const PracticeContents: React.FunctionComponent<PSProrps> = ({ fireInfo }) => {
-  const [index, setwidth] = React.useState(0);
+  const [index, setIndex] = React.useState(0);
+  const [content, setContent] = React.useState<string[]>([]);
+  const [date, setDate] = React.useState<string[]>([]);
+  const [title, setCitle] = React.useState<string[]>([]);
+  const clear = () => {
+    fireInfo.map((a) => {
+      content.push(a[0].content);
+      date.push(a[0].date);
+      title.push(a[0].title);
+    });
+  };
+
   const left = () => {
     if (index > 0) {
-      setwidth(index - 1);
+      setIndex(index - 1);
     } else {
-      setwidth(fireInfo.length - 3);
+      setIndex(fireInfo.length - 3);
     }
   };
 
   const right = () => {
     if (index < fireInfo.length - 3) {
-      setwidth(index + 1);
+      setIndex(index + 1);
     } else {
-      setwidth(0);
+      setIndex(0);
     }
   };
+
+  React.useEffect(() => {
+    clear();
+  }, []);
+
   return (
     <Container>
-      <button style={{marginRight:'10px'}} onClick={left}>left</button>
+      <button style={{ marginRight: "10px" }} onClick={left}>
+        left
+      </button>
       <ContentsContainer>
-        <P>2021-12-01</P>
-        <span>{fireInfo[index]}</span>
+        <P>{date[0]}</P>
+        <span>{content[0]}</span>
       </ContentsContainer>
       <ContentsContainer>
-        <P>2021-12-02</P>
-        <span>{fireInfo[index + 1]}</span>
+        <P>{date[1]}</P>
+        <span>{content[1]}</span>
       </ContentsContainer>
       <ContentsContainer>
-        <P>2021-12-03</P>
-        <span>{fireInfo[index + 2]}</span>
+        <P>{date[2]}</P>
+        <span>{content[2]}</span>
       </ContentsContainer>
       <button onClick={right}>right</button>
     </Container>

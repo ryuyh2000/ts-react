@@ -44,7 +44,7 @@ interface ITextBox {
 
 }
 // index 를 넘겨서 *100 해주면 될듯?
-const TextBox: React.FunctionComponent<ITextBox> = ({
+const GitSlide: React.FunctionComponent<ITextBox> = ({
   commitMsg,
   commitDate,
 }) => {
@@ -84,29 +84,4 @@ const TextBox: React.FunctionComponent<ITextBox> = ({
   );
 };
 
-export default TextBox;
-
-/* 
-commit
-commitDate
-fireInfo
-
-            {commit.map((commitMSG, index) => (
-              <li key={index}>
-                <TextBox
-                  date={commitDate[index].date}
-                  Text={commitMSG.message}
-                  index={index}
-                />
-              </li>
-            ))}
-            {fireInfo.map((info, index) => (
-              <li key={index}>
-                <TextBox
-                  date={todayDate}
-                  Text={info}
-                  index={index}
-                />
-              </li>
-            ))}
-*/
+export default GitSlide;
