@@ -10,11 +10,14 @@ const P = styled.p`
   opacity: 0;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ left: boolean }>`
   margin-left: 35%;
-  width: 800px;
+  width: 566px;
   height: 100px;
   display: flexbox;
+  ${(props) =>
+    props.left ? "background-color:red" : "background-color:green"};
+  transition-duration: 0.3s;
 `;
 
 const ContentsContainer = styled.div`
@@ -41,7 +44,6 @@ const ContentsContainer = styled.div`
 interface ITextBox {
   commitMsg: string[];
   commitDate: string[];
-
 }
 // index 를 넘겨서 *100 해주면 될듯?
 const GitSlide: React.FunctionComponent<ITextBox> = ({
@@ -49,9 +51,11 @@ const GitSlide: React.FunctionComponent<ITextBox> = ({
   commitDate,
 }) => {
   const [index, setwidth] = React.useState(0);
+  const [boo, setBoo] = React.useState(false);
   const left = () => {
     if (index > 0) {
       setwidth(index - 1);
+      setBoo(!boo);
     } else {
       setwidth(commitMsg.length - 3);
     }
@@ -59,14 +63,17 @@ const GitSlide: React.FunctionComponent<ITextBox> = ({
 
   const right = () => {
     if (index < commitMsg.length - 3) {
-      setwidth(index + 1); 
+      setwidth(index + 1);
+      setBoo(!boo);
     } else {
       setwidth(0);
     }
   };
   return (
-    <Container>
-      <button style={{marginRight:'10px'}} onClick={left}>left</button>
+    <Container left={boo}>
+      <button style={{ marginRight: "10px" }} onClick={left}>
+        left
+      </button>
       <ContentsContainer>
         <P>{commitDate[index]}</P>
         <span>{commitMsg[index]}</span>
