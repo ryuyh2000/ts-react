@@ -228,6 +228,8 @@ const App = () => {
               onChange={textAreaChange}
             />
             <button>Send Study Record</button>
+            <button>Send Study Record</button>
+            <button>Send Study Record</button>
           </div>
         </Box>
       )}
