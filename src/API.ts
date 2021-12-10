@@ -28,4 +28,5 @@ export const GitApi = {
 export const CRUDApi = {
   getContents: () => CRUDApiURl.get("/api/tasks"),
   postContents: (object: CRUDType) => CRUDApiURl.post("/api/task/", object),
+  delContents:()=>CRUDApiURl.post("/api/delete-task")
 };
